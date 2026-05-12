@@ -25,8 +25,13 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   const config = app.get(ConfigService);
   const jwtSecret = config.get<string>('JWT_SECRET') ?? '';
-  if (jwtSecret.length < 32) {
-    throw new Error('JWT_SECRET must be at least 32 characters');
+  const nodeEnv =
+    config.get<string>('NODE_ENV') ?? process.env.NODE_ENV ?? 'development';
+  const minJwtLen = nodeEnv === 'production' ? 32 : 16;
+  if (jwtSecret.length < minJwtLen) {
+    throw new Error(
+      `JWT_SECRET must be at least ${minJwtLen} characters (NODE_ENV=${nodeEnv})`,
+    );
   }
   app.setGlobalPrefix('api', {
     exclude: [

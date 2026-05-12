@@ -25,6 +25,7 @@ function websocketCorsOrigins(): string | string[] {
     const [single] = list;
     return single;
   }
+  return list;
 }
 
 @WebSocketGateway({

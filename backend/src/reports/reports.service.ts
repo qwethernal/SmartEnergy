@@ -34,7 +34,10 @@ export class ReportsService {
         detail: [],
       };
     }
-    const sumEurMwh = spots.reduce((a, s) => a + Number(s.priceEurMwh), 0);
+    const sumEurMwh = spots.reduce(
+      (a: number, s: (typeof spots)[number]) => a + Number(s.priceEurMwh),
+      0,
+    );
     const avgEurMwh = sumEurMwh / spots.length;
     const averageSpotEurPerKwh = avgEurMwh / 1000;
     const energyKwh = query.energyKwh ?? 100;

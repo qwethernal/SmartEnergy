@@ -109,7 +109,7 @@ export class PricesService implements OnApplicationBootstrap {
       where: { area: 'EE', periodStart: { gte: now, lte: until } },
       orderBy: { periodStart: 'asc' },
     });
-    return rows.map((r) => ({
+    return rows.map((r: (typeof rows)[number]) => ({
       periodStart: r.periodStart.toISOString(),
       priceEurMwh: Number(r.priceEurMwh),
     }));

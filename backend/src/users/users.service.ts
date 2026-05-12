@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserRole } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma, UserRole } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePreferencesDto } from './dto/update-preferences.dto';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -61,10 +61,7 @@ export class UsersService {
         select: { id: true, email: true, active: true },
       });
     } catch (e) {
-      if (
-        e instanceof Prisma.PrismaClientKnownRequestError &&
-        e.code === 'P2025'
-      ) {
+      if (e instanceof PrismaClientKnownRequestError && e.code === 'P2025') {
         throw new NotFoundException('User not found');
       }
       throw e;
