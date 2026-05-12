@@ -37,6 +37,7 @@ services:
       LOG_LEVEL: ${LOG_LEVEL:-info}
       ELERING_NPS_BASE_URL: ${ELERING_NPS_BASE_URL:-https://dashboard.elering.ee}
       ELERING_HTTP_TIMEOUT_MS: ${ELERING_HTTP_TIMEOUT_MS:-8000}
+      METRICS_BEARER_TOKEN: ${METRICS_BEARER_TOKEN:-}
     depends_on:
       mysql:
         condition: service_healthy

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { CommonModule } from './../src/common/common.module';
@@ -9,7 +10,10 @@ describe('Health (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [CommonModule],
+      imports: [
+        ConfigModule.forRoot({ isGlobal: true, ignoreEnvFile: true }),
+        CommonModule,
+      ],
     }).compile();
 
     app = moduleFixture.createNestApplication();
