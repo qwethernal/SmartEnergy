@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  MASTER
+  USER
+}
+
+enum DeviceConnectionType {
+  HTTP
+  MQTT
+  IP_PING
+}
+
+enum PowerState {
+  ON
+  OFF
+  UNKNOWN
+}
+
+model User {
+  id           String            @id @default(cuid())
+  email        String            @unique
+  passwordHash String
+  role         UserRole          @default(USER)
+  active       Boolean           @default(true)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  devices      Device[]
+  preferences  UserPreferences?
+}
+
+model UserPreferences {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fixedTariffEurKwh   Decimal  @default(0.15) @db.Decimal(12, 6)
+  vacationMode        Boolean  @default(false)
+  telegramChatId      String?
+  discordWebhookUrl   String?
+  notifyPriceSpike    Boolean  @default(true)
+  notifyDeviceAuto    Boolean  @default(true)
+  notifyDeviceOffline Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model Device {
+  id                String               @id @default(cuid())
+  userId            String
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  description       String               @default("")
+  connectionType    DeviceConnectionType
+  connectionConfig  Json
+  isCritical        Boolean              @default(false)
+  thresholdEurMwh   Decimal?             @db.Decimal(14, 4)
+  automationEnabled Boolean              @default(true)
+  manualOverride    Boolean              @default(false)
+  lastState         PowerState           @default(UNKNOWN)
+  lastPolledAt      DateTime?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  commandLogs       DeviceCommandLog[]
+
+  @@index([userId])
+}
+
+model DeviceCommandLog {
+  id        String   @id @default(cuid())
+  deviceId  String
+  device    Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  command   String
+  source    String
+  success   Boolean
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([deviceId, createdAt])
+}
+
+model SpotPrice {
+  id          String   @id @default(cuid())
+  area        String   @default("EE")
+  priceEurMwh Decimal  @db.Decimal(14, 4)
+  periodStart DateTime
+  fetchedAt   DateTime @default(now())
+
+  @@index([periodStart])
+  @@unique([area, periodStart])
+}

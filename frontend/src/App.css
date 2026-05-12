@@ -1,0 +1,96 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+  background: #0b1020;
+  color: #e8ecff;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #8ab4ff;
+}
+
+.auth,
+.panel {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem;
+}
+
+.auth form,
+.panel .actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+input {
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid #2a355f;
+  background: #121a33;
+  color: inherit;
+}
+
+button {
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #3b4b86;
+  background: linear-gradient(180deg, #2c3b78, #1f2a55);
+  color: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+.muted {
+  color: #9aa3c7;
+  font-size: 0.95rem;
+}
+
+.error {
+  color: #ffb4b4;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.actions {
+  flex-direction: row !important;
+}
+
+.devices {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+}
+
+.devices th,
+.devices td {
+  border-bottom: 1px solid #222c4d;
+  padding: 0.5rem 0.35rem;
+  text-align: left;
+}
+
+code {
+  background: #121a33;
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+}
